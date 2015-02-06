@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.8" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
 <title>Trinotate: Transcriptome Functional Annotation and Analysis</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,7 +94,9 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-
+pre {
+  white-space: pre-wrap;
+}
 
 #author {
   color: #527bbd;
@@ -223,7 +225,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; }
+span.image img { border-style: none; vertical-align: text-bottom; }
 a.image:visited { color: white; }
 
 dl {
@@ -741,12 +743,39 @@ asciidoc.install();
 <img src="images/TrinotateLogo.png" alt="Trinotate image" />
 </div>
 </div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="title">Trinotate Breaking News</div>
+<div class="ulist"><ul>
+<li>
+<p>
+Feb, 2015: Trinotate moves to Github
+</p>
+</li>
+<li>
+<p>
+Feb, 2015: Trinotate release v2.0 is now available (see below)
+</p>
+</li>
+<li>
+<p>
+Feb, 2015: <a href="TrinotateWeb.html">TrinotateWeb</a> is becoming more useful, the interface was given a facelift including other various performance improvements.
+</p>
+</li>
+</ul></div>
+</td>
+</tr></table>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_background">Background</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (NCBI-BLAST), protein domain identification (HMMER/PFAM), protein signal prediction (singalP/tmHMM), and comparison to currently curated annotation databases (EMBL Uniprot eggNOG/GO Pathways databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.</p></div>
+<div class="paragraph"><p>Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (BLAST+/SwissProt/Uniref90), protein domain identification (HMMER/PFAM), protein signal peptide and transmembrane domain prediction (singalP/tmHMM), and comparison to currently curated annotation databases (EMBL Uniprot eggNOG/GO Pathways databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.</p></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
@@ -817,13 +846,13 @@ asciidoc.install();
 <li>
 <p>
 Trinotate
-<em>http://trinotate.sourceforge.net</em> <a href="https://sourceforge.net/projects/trinotate/files/">download Trinotate</a>
+<em>http://trinotate.github.io</em> <a href="https://github.com/Trinotate/Trinotate/releases">download Trinotate</a>
 </p>
 </li>
 <li>
 <p>
 Trinity (includes TransDecoder and support for expression and DE analysis using RSEM and Bioconductor):
-<em>http://trinityrnaseq.sourceforge.net/</em> <a href="https://sourceforge.net/projects/trinityrnaseq/files/">download Trinity</a>
+<em>http://trinityrnaseq.github.io/</em> <a href="https://github.com/trinityrnaseq/trinityrnaseq/releases">download Trinity</a>.
 </p>
 </li>
 <li>
@@ -834,7 +863,7 @@ sqlite (required for database integration):
 </li>
 <li>
 <p>
-NCBI Blast: Blast database Homology Search:
+NCBI BLAST+: Blast database Homology Search:
 <a href="http://www.ncbi.nlm.nih.gov/books/NBK52640/">http://www.ncbi.nlm.nih.gov/books/NBK52640/</a>
 </p>
 </li>
@@ -897,24 +926,26 @@ $HMMSEARCH_BINARY = "/path/to/hmmsearch2";</code></pre>
 <div class="sect1">
 <h2 id="SequencesRequired">2. Sequence Databases Required</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Trinotate is built around specific releases of SwissProt and Pfam.  You can find these specific versions mirrored at the Trinotate ftp site:</p></div>
+<div class="paragraph"><p>Trinotate is built around specific releases of SwissProt and Pfam, and custom protein files are generated for use with Trinotate. It is imperative that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:</p></div>
 <div class="paragraph"><p>SwissProt
-<a href="http://sourceforge.net/projects/trinotate/files/TRINOTATE_RESOURCES/20140708/uniprot_sprot.fasta.gz/download">Download SwissProt here</a></p></div>
+<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz">Download SwissProt here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
-gunzip uniprot_sprot.fasta.gz
-makeblastdb -in uniprot_sprot.fasta -dbtype prot</code></pre>
+mv uniprot_sprot.trinotate_v2.0.pep.gz uniprot_sprot.trinotate.pep.gz
+gunzip uniprot_sprot.trinotate.pep.gz
+makeblastdb -in uniprot_sprot.trinotate.pep -dbtype prot</code></pre>
 </div></div>
 <div class="paragraph"><p>Uniref90
-<a href="http://sourceforge.net/projects/trinotate/files/TRINOTATE_RESOURCES/20140708/uniref90.fasta.gz/download">Download Uniref90 here</a></p></div>
+<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz">Download Uniref90 here</a></p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>gunzip uniref90.fasta.gz
-makeblastdb -in uniref90.fasta -dbtype prot</code></pre>
+<pre><code>mv uniprot_uniref90.trinotate_v2.0.pep.gz uniprot_uniref90.trinotate.pep.gz
+gunzip uniprot_uniref90.trinotate.pep.gz
+makeblastdb -in uniprot_uniref90.trinotate.pep -dbtype prot</code></pre>
 </div></div>
 <div class="paragraph"><p>Pfam domains
-<a href="http://sourceforge.net/projects/trinotate/files/TRINOTATE_RESOURCES/20140708/Pfam-A.hmm.gz/download">Download Pfam-A here</a></p></div>
+<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>Uncompress and prepare it for use with 'hmmscan' like so:
@@ -928,19 +959,20 @@ hmmpress Pfam-A.hmm</code></pre>
 <div class="paragraph"><p>Trinity transcripts are searched for sequence homologies using BLASTX, and RNAMMER is used to identify potential rRNA transcripts.</p></div>
 <div class="paragraph"><p>Transdecoder-predicted coding regions are also searched for sequence homologies using BLASTP, protein domains identified via a Pfam search, and additional properties such as signal peptides and likely transmembrane-spanning regions are explored.</p></div>
 <div class="sect1">
-<h2 id="_trinity_files_needed_for_execution">1. Trinity files needed for execution</h2>
+<h2 id="_files_needed_for_execution">1. Files needed for execution</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Trinity.fasta - Final product containing all the transcripts assembled by Trinity</p></div>
-<div class="paragraph"><p>Trinity.fasta.transdecoder.pep: Most likely Longest-ORF peptide candidates generated from the Trinity Assembly. Instructions for generation of this file can be found here:
-<a href="http://trinityrnaseq.sourceforge.net/analysis/extract_proteins_from_trinity_transcripts.html">http://trinityrnaseq.sourceforge.net/analysis/extract_proteins_from_trinity_transcripts.html</a></p></div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content"><a href="http://transdecoder.sf.net">Transdecoder</a> is included in Trinity at <em>$TRINITY_HOME/trinity-plugins/transdecoder/</em> ;  Newer versions of TransDecoder should generate a file <em>Trinity.fasta.transdecoder.pep</em>. Earlier versions will generate an equivalent file called <em>transdecoder.pep</em>. These should be treated as equivalent outputs.</td>
-</tr></table>
-</div>
+<div class="ulist"><ul>
+<li>
+<p>
+<em>Trinity.fasta</em> - Final product containing all the transcripts assembled by Trinity
+</p>
+</li>
+<li>
+<p>
+<em>Trinity.fasta.transdecoder.pep</em> - Most likely Longest-ORF peptide candidates generated from the Trinity Assembly. Instructions for generation of this file can be found here: <a href="http://transdecoder.github.io/">http://transdecoder.github.io/</a>
+</p>
+</li>
+</ul></div>
 </div>
 </div>
 <div class="sect1">
@@ -974,7 +1006,7 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"># search Trinity transcripts</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_sprot.fasta -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastx.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_sprot.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastx.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -986,7 +1018,7 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_sprot.fasta  -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastp.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_sprot.trinotate.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastp.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -998,13 +1030,13 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniref90.fasta  -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastp.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastx.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniref90.fasta -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastx.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastp.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -1018,6 +1050,14 @@ cellspacing="0" cellpadding="4">
 <div class="title">Note</div>
 </td>
 <td class="content">num_threads should be equal to the amount of cores available</td>
+</tr></table>
+</div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">If you have access to a compute farm running LSF, SGE, PBS, or SLURM, consider using <a href="http://HpcGridRunner.github.io">HPC GridRunner</a> to maximally parallelize your blast searches.</td>
 </tr></table>
 </div>
 </div>
@@ -1060,14 +1100,6 @@ cellspacing="0" cellpadding="4">
 <div class="title">Note</div>
 </td>
 <td class="content">num_threads should be equal to the number of cores available</td>
-</tr></table>
-</div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">if the --search_pfam parameter was invoked with <a href="http://transdecoder.sf.net">TransDecoder</a> as part of ORF identification, then you can simply reuse the existing <em>.domtbl</em> output file here.</td>
 </tr></table>
 </div>
 </div>
@@ -1234,16 +1266,10 @@ report generation:
 <div class="sect1">
 <h2 id="_retrieve_the_trinotate_pre_generated_resource_sqlite_database">1. Retrieve the Trinotate Pre-generated Resource SQLite database</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>A pregenerated sqlite database that contains swissprot-related annotation information is available from the Trinity ftp site. Pull it down like so:</p></div>
-<div class="paragraph"><p>If you plan on only searching SWISSPROT, then you can use the smaller boilerplate database:</p></div>
+<div class="paragraph"><p>A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>wget "http://sourceforge.net/projects/trinotate/files/TRINOTATE_RESOURCES/20140708/Trinotate.20140708.swissprot.sqlite.gz/download" -O Trinotate.sqlite.gz</code></pre>
-</div></div>
-<div class="paragraph"><p>If you plan on searching both SWISSPROT and Uniref90, you must use the more comprehensive boilerplate database (significantly larger):</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>wget "http://sourceforge.net/projects/trinotate/files/TRINOTATE_RESOURCES/20140708/Trinotate.20140708.swissTrEMBL.sqlite.gz/download" -O Trinotate.sqlite.gz</code></pre>
+<pre><code>wget "ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
 </div></div>
 <div class="paragraph"><p>Uncompress it like so:</p></div>
 <div class="literalblock">
@@ -1255,7 +1281,7 @@ report generation:
 <td class="icon">
 <div class="title">Note</div>
 </td>
-<td class="content">The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (July 7, 2014).</td>
+<td class="content">The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Feb, 2015).</td>
 </tr></table>
 </div>
 </div>
@@ -1503,15 +1529,14 @@ Nucleic Acids Res. 2007 Apr 22.
 <div class="sect1">
 <h2 id="Contact">Contact Us</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Questions, comments, etc., can be sent to the Trinotate email list at <a href="mailto:trinotate-users@lists.sf.net">trinotate-users@lists.sf.net</a>.</p></div>
-<div class="paragraph"><p>You can also visit the email <a href="https://sourceforge.net/mailarchive/forum.php?forum_name=trinotate-users">archive</a> or <a href="https://lists.sourceforge.net/lists/listinfo/trinotate-users">subscribe</a>.</p></div>
+<div class="paragraph"><p>User support for Trinotate is provided at the Trinotate Google Group: <a href="https://groups.google.com/forum/?hl=en#!forum/trinotate-users">https://groups.google.com/forum/?hl=en#!forum/trinotate-users</a></p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-07-08 11:26:20 EDT
+Last updated 2015-02-05 17:51:50 EST
 </div>
 </div>
 </body>

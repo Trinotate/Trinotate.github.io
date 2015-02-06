@@ -10,9 +10,9 @@ Trinotate makes extensive use of the http://canvasxpress.org[CanvasXpress] infra
 
 == TrinotateWeb Showcase ==
 
-The current capabilities of TrinotateWeb are showcased below:
+The current capabilities of TrinotateWeb are showcased below (note, the interface is continually improved across software releases):
 
-image::images/TrinotateWebCollage.png[TrinotateWebCollage image]
+image::images/TrinotateWebCollage.png["TrinotateWebCollage image", width=800]
 
 
 == Populating Trinotate.sqlite with Expression Data ==
@@ -47,7 +47,7 @@ The step of defining expression clusters can be run multiple times using differe
 
 == Populate Trinotate.sqlite with Annotation Text ==
 
-Any free-text annotation can be applied to your input transcripts, and these data can then be queried by text searches within TrinotateWeb.  This was the simplest way to get text-searching up and running in a flexible way, and more sophisticated methods for querying the data will be included in future releases.  If you've used Trinotate to generate annotations (ex. generated the Trinotate_report.xls tab-delimited summary data file), you can simply import that data table back into Trinotate as the textual annotation for the transcripts.  Alternatively, if you have a file containing a tab delimited format of:
+Any free-text annotation can be applied to your input transcripts, and these data can then be queried by text searches within TrinotateWeb.  This was the simplest way to get text-searching up and running in a flexible way, and more sophisticated methods for querying the data will be included in future releases.  If you've used Trinotate to generate annotations (ex. generated the Trinotate_report.xls tab-delimited summary data file), you can simply import that data table back into Trinotate as the textual annotation for the transcripts (Highly Recommended).  Alternatively, if you have a file containing a tab delimited format of:
 
     gene_id (tab) transcript_id (tab) annotation text
 
@@ -67,27 +67,70 @@ Simply './runMe.sh' in that directory to generate the fully populated 'Trinotate
 
 == Running TrinotateWeb ==
 
-To run TrinotateWeb, start the light-weight webserver by doing the following within a terminal window:
+To run TrinotateWeb, you'll need a light-weight webserver installed. We recommend using http://cesanta.com/mongoose.shtml[mongoose], which is free and easy to obtain for Linux.  For installation on Mac, I found it's easiest to use http://brew.sh/[homebrew] and install via 'brew install mongoose'.
 
    cd $TRINOTATE_HOME/TrinotateWeb/
 
-   ./httpserver.py
+   ./run_mongoose_webserver.sh 
 
 and leave it running within your terminal window.  To stop it, type cntrl-C or exit the terminal.
 
 Then, go to your web browser and visit the URL:  'http://localhost:8080/cgi-bin/index.cgi'
 
-You should see the following:
+You should be prompted to enter in the path to your Trinotate sqlite database.
 
-image::images/TrinotateWebEntrypageEmpty.png[Trinotate Web Entry Page unfilled]
+image::images/TrinotateEntry.png["Trinotate Web Entry Page unfilled",width=500]
 
-Enter in the full path to your Trinotate.sqlite database file and click submit.
+== Navigating TrinotateWeb ==
 
-image::images/TrinotateWebEntrypageFilled.png[Trinotate Web Entry Page Filled]
+=== Overview Tab ===
 
-And now you should find the TrinotateWeb entry page, which is your starting point for data exploration. 
+The overview tab will show basic summary statistics.
 
-image::images/TrinotateWebSiteEntry.png[TrinotateWeb Site Entry]
+image::images/TrinotateOverview.png["Trinotate overview tab", width=500]
 
-Click and explore - and remind yourself that this is the early release version and there is way more work to be done. :)
+
+=== Differential Expression Analysis ===
+
+Differential expression can be explored from interactive volcano plots, MA plots, and heatmaps, starting from the 'Differential Expression' tab.
+
+image::images/TrinotateDEselection.png["DE selection page", width=500]
+
+An example volcano plot for a pairwise comparison between two samples is shown below:
+
+image::images/TrinotateVolcano.png["Trinotate Volcano Plot page", width=500]
+
+Just double-click on a point to visit that gene or transcript's expression and annotation report.  Drag and select a range to zoom in.
+
+=== Gene/Transcript ID or Keyword Searches ===
+
+==== Keyword Search ====
+
+You can search for genes or transcripts via keyword searches.  For example, from the keyword search tab, I type in 'transporter' like so:
+
+image::images/TrinotateKeywordSelectionInput.png["Trinotate keyword search entry", width=500]
+
+Submitting the search results in a list of all entries where 'transporter' was found among the annotation text.
+
+image::images/TrinotateKeywordSelectionResult.png["Trinotate keyword search results", width=500]
+
+==== Gene/Transcript ID Search ====
+
+Given a gene or transcript identifier, the feature can be searched for directly via the 'Gene or Transcript ID Search' tab:
+
+image::images/TrinotateGeneIDselection.png["Trinotate gene ID selection", width=500]
+
+=== Gene/Transcript Expression and Annotation Reports ===
+
+A given gene or transcript search will lead to a gene/transcript expression and annotation report page:
+
+image::images/TrinotateGeneExpressionReport.png["Trinotate gene expression report", width=500]
+
+Annotation information will be displayed below, including a view of the position of the ORF on the transcript and any homology match information.
+
+image::images/TrinotateTranscriptReport.png["Trinotate transcript annotation report", width=500]
+
+
+
+
 
