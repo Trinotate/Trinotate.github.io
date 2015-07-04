@@ -57,7 +57,7 @@ http://www.sqlite.org/
 http://www.ncbi.nlm.nih.gov/books/NBK52640/
 
 - HMMER/PFAM Protein Domain Identification:
-http://hmmer.janelia.org/software
+http://hmmer.janelia.org/download.html
 
 Below are optional but recommended:
 
