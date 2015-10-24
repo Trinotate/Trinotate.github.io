@@ -94,7 +94,7 @@ http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
 Trinotate is built around specific releases of SwissProt and Pfam, and custom protein files are generated for use with Trinotate. It is imperative that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:
 
 SwissProt
-ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz[Download SwissProt here]
+https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz[Download SwissProt here]
 
     be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
     mv uniprot_sprot.trinotate_v2.0.pep.gz uniprot_sprot.trinotate.pep.gz
@@ -102,14 +102,14 @@ ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.
     makeblastdb -in uniprot_sprot.trinotate.pep -dbtype prot
 
 Uniref90
-ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz[Download Uniref90 here]
+https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz[Download Uniref90 here]
 
     mv uniprot_uniref90.trinotate_v2.0.pep.gz uniprot_uniref90.trinotate.pep.gz
     gunzip uniprot_uniref90.trinotate.pep.gz
     makeblastdb -in uniprot_uniref90.trinotate.pep -dbtype prot
 
 Pfam domains
-ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz[Download Pfam-A here]
+https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz[Download Pfam-A here]
 
    Uncompress and prepare it for use with 'hmmscan' like so:
    gunzip Pfam-A.hmm.gz
@@ -279,7 +279,7 @@ Follow the steps below to obtain a boilerplate Trinotate sqlite database and pop
 
 A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:
 
-   wget "ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
+   wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
 
 
 Uncompress it like so:

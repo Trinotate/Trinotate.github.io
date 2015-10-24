@@ -928,7 +928,7 @@ $HMMSEARCH_BINARY = "/path/to/hmmsearch2";</code></pre>
 <div class="sectionbody">
 <div class="paragraph"><p>Trinotate is built around specific releases of SwissProt and Pfam, and custom protein files are generated for use with Trinotate. It is imperative that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:</p></div>
 <div class="paragraph"><p>SwissProt
-<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz">Download SwissProt here</a></p></div>
+<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz">Download SwissProt here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
@@ -937,7 +937,7 @@ gunzip uniprot_sprot.trinotate.pep.gz
 makeblastdb -in uniprot_sprot.trinotate.pep -dbtype prot</code></pre>
 </div></div>
 <div class="paragraph"><p>Uniref90
-<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz">Download Uniref90 here</a></p></div>
+<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz">Download Uniref90 here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>mv uniprot_uniref90.trinotate_v2.0.pep.gz uniprot_uniref90.trinotate.pep.gz
@@ -945,7 +945,7 @@ gunzip uniprot_uniref90.trinotate.pep.gz
 makeblastdb -in uniprot_uniref90.trinotate.pep -dbtype prot</code></pre>
 </div></div>
 <div class="paragraph"><p>Pfam domains
-<a href="ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
+<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>Uncompress and prepare it for use with 'hmmscan' like so:
@@ -1269,7 +1269,7 @@ report generation:
 <div class="paragraph"><p>A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>wget "ftp://ftp.broadinstitute.org/pub/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
+<pre><code>wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
 </div></div>
 <div class="paragraph"><p>Uncompress it like so:</p></div>
 <div class="literalblock">
@@ -1536,7 +1536,7 @@ Nucleic Acids Res. 2007 Apr 22.
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-07-04 09:01:40 EDT
+Last updated 2015-10-23 20:16:58 EDT
 </div>
 </div>
 </body>
