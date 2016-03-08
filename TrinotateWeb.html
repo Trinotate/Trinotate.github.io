@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
 <title>TrinotateWeb: Graphical Interface for Navigating Trinotate Annotations and Expression Analyses</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,9 +94,7 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-pre {
-  white-space: pre-wrap;
-}
+
 
 #author {
   color: #527bbd;
@@ -225,7 +223,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; vertical-align: text-bottom; }
+span.image img { border-style: none; }
 a.image:visited { color: white; }
 
 dl {
@@ -745,7 +743,7 @@ asciidoc.install();
 <img src="images/canvasXpressLogoBig.png" alt="CanvasXpress logo" width="200" />
 </div>
 </div>
-<div class="paragraph"><p>Trinotate makes extensive use of the <a href="http://canvasxpress.org">CanvasXpress</a> infrastructure, as developed and made publicly available by Isaac Neuhaus. "CanvasXpress was developed as the core visualization component for bioinformatics and systems biology analysis at Bristol-Myers Squibb" (<a href="http://canvasxpress.org/about.html">More about CanvasXpress</a>).</p></div>
+<div class="paragraph"><p>Trinotate makes extensive use of the <a href="http://canvasxpress.org">CanvasXpress</a> infrastructure, as developed and made publicly available by <strong>Isaac Neuhaus</strong>. "CanvasXpress was developed as the core visualization component for bioinformatics and systems biology analysis at Bristol-Myers Squibb" (<a href="http://canvasxpress.org/about.html">More about CanvasXpress</a>).</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -767,19 +765,20 @@ asciidoc.install();
 <div class="literalblock">
 <div class="content">
 <pre><code># import the fpkm and DE analysis stuff
-$TRINOTATE_HOME/util/transcript_expression/import_expression_and_DE_results.pl --sqlite Trinotate.sqlite \
-                                                                 --samples_file samples_n_reads_described.txt \
-                                                                 --count_matrix Trinity_trans.counts.matrix \
-                                                                 --fpkm_matrix Trinity_trans.counts.matrix.TMM_normalized.FPKM \
-                                                                 --DE_dir edgeR_trans/ \
-                                                                 --transcript_mode</code></pre>
+$TRINOTATE_HOME/util/transcript_expression/import_expression_and_DE_results.pl \
+          --sqlite Trinotate.sqlite \
+          --samples_file samples_n_reads_described.txt \
+          --count_matrix Trinity_trans.counts.matrix \
+          --fpkm_matrix Trinity_trans.counts.matrix.TMM_normalized.FPKM \
+          --DE_dir edgeR_trans/ \
+          --transcript_mode</code></pre>
 </div></div>
 <div class="admonitionblock">
 <table><tr>
 <td class="icon">
 <div class="title">Note</div>
 </td>
-<td class="content">The above is based on using the transcript-level abundance estimates and corresponding DE analyses.  Abundance estimation and DE analysis can be performed at the <em>gene</em> level as well.  Optionally, run the above using <em>--component_mode</em> (gene mode) with the corresponding gene-based files.  Both transcript-level and gene-level data can be loaded into the single Trinotate.sqlite instance for analysis.</td>
+<td class="content">The above is based on using the transcript-level abundance estimates and corresponding DE analyses.  Abundance estimation and DE analysis can be performed at the <em>gene</em> level as well.  Optionally, run the above using <em>--gene_mode</em> with the corresponding gene-based files.  Both transcript-level and gene-level data can be loaded into the single Trinotate.sqlite instance for analysis.</td>
 </tr></table>
 </div>
 </div>
@@ -797,7 +796,7 @@ $TRINOTATE_HOME/util/transcript_expression/import_transcript_clusters.pl \
      --sqlite Trinotate.sqlite \
      edgeR_trans/diffExpr.P0.001_C2.matrix.R.all.RData.clusters_fixed_P_20/*matrix</code></pre>
 </div></div>
-<div class="paragraph"><p>The step of defining expression clusters can be run multiple times using different parameters according to the <a href="http://trinityrnaseq.sourceforge.net/analysis/diff_expression_analysis.html">Trinity documentation</a>.  Each set of clusters can be loaded in separately as above and then separately studied within TrinotateWeb.</p></div>
+<div class="paragraph"><p>The step of defining expression clusters can be run multiple times using different parameters according to the <a href="https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression">Trinity documentation</a>.  Each set of clusters can be loaded in separately as above and then separately studied within TrinotateWeb.</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -830,16 +829,24 @@ $TRINOTATE_HOME/util/annotation_importer/import_transcript_names.pl Trinotate.sq
 <div class="sect1">
 <h2 id="_running_trinotateweb">Running TrinotateWeb</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>To run TrinotateWeb, you&#8217;ll need a light-weight webserver installed. We recommend using <a href="http://cesanta.com/mongoose.shtml">mongoose</a>, which is free and easy to obtain for Linux.  For installation on Mac, I found it&#8217;s easiest to use <a href="http://brew.sh/">homebrew</a> and install via <em>brew install mongoose</em>.</p></div>
+<div class="paragraph"><p>To run TrinotateWeb, you&#8217;ll need a light-weight webserver installed. We recommend using <a href="https://www.lighttpd.net/">lighttpd</a>, which is free and easy to obtain for Linux and Mac. Once installed, you can launch it via:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>cd $TRINOTATE_HOME/TrinotateWeb/</code></pre>
+<pre><code>cd $TRINOTATE_HOME</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>./run_mongoose_webserver.sh</code></pre>
+<pre><code>./run_TrinotateWebserver.pl 8080</code></pre>
 </div></div>
 <div class="paragraph"><p>and leave it running within your terminal window.  To stop it, type cntrl-C or exit the terminal.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">The number 8080 is the port at which it will be listening to connections from your web browser. You can use whatever open port is available.</td>
+</tr></table>
+</div>
 <div class="paragraph"><p>Then, go to your web browser and visit the URL:  <em>http://localhost:8080/cgi-bin/index.cgi</em></p></div>
 <div class="paragraph"><p>You should be prompted to enter in the path to your Trinotate sqlite database.</p></div>
 <div class="imageblock">
@@ -925,7 +932,7 @@ $TRINOTATE_HOME/util/annotation_importer/import_transcript_names.pl Trinotate.sq
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-02-05 19:49:55 EST
+Last updated 2016-03-08 16:11:51 EST
 </div>
 </div>
 </body>

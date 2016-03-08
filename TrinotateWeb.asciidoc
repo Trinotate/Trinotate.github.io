@@ -6,7 +6,7 @@ TrinotateWeb: Graphical Interface for Navigating Trinotate Annotations and Expre
 TrinotateWeb provides a web-based graphical interface to support local user-based navigation of Trinotate annotations and differential expression data. Simply run the included light-weight webserver, open your web browser and point it to your Trinotate SQLite database, and begin your data exploration.  Note, Trinotate is not yet a full-featured application, but is instead in a very early state of development. As an open source community-driven software development project, contributions are always welcome.
 
 image::images/canvasXpressLogoBig.png["CanvasXpress logo",width=200] 
-Trinotate makes extensive use of the http://canvasxpress.org[CanvasXpress] infrastructure, as developed and made publicly available by Isaac Neuhaus. "CanvasXpress was developed as the core visualization component for bioinformatics and systems biology analysis at Bristol-Myers Squibb" (http://canvasxpress.org/about.html[More about CanvasXpress]).
+Trinotate makes extensive use of the http://canvasxpress.org[CanvasXpress] infrastructure, as developed and made publicly available by *Isaac Neuhaus*. "CanvasXpress was developed as the core visualization component for bioinformatics and systems biology analysis at Bristol-Myers Squibb" (http://canvasxpress.org/about.html[More about CanvasXpress]).
 
 == TrinotateWeb Showcase ==
 
@@ -22,14 +22,16 @@ TrinotateWeb currently revolves around using the differential expression analysi
 After having run the above abundance estimation and DE analysis steps, you can begin loading the expression data like so:
 
   # import the fpkm and DE analysis stuff
-  $TRINOTATE_HOME/util/transcript_expression/import_expression_and_DE_results.pl --sqlite Trinotate.sqlite \
-                                                                   --samples_file samples_n_reads_described.txt \
-                                                                   --count_matrix Trinity_trans.counts.matrix \
-                                                                   --fpkm_matrix Trinity_trans.counts.matrix.TMM_normalized.FPKM \
-                                                                   --DE_dir edgeR_trans/ \
-                                                                   --transcript_mode
+  $TRINOTATE_HOME/util/transcript_expression/import_expression_and_DE_results.pl \
+            --sqlite Trinotate.sqlite \
+            --samples_file samples_n_reads_described.txt \
+            --count_matrix Trinity_trans.counts.matrix \
+            --fpkm_matrix Trinity_trans.counts.matrix.TMM_normalized.FPKM \
+            --DE_dir edgeR_trans/ \
+            --transcript_mode
+
 [NOTE]
-The above is based on using the transcript-level abundance estimates and corresponding DE analyses.  Abundance estimation and DE analysis can be performed at the 'gene' level as well.  Optionally, run the above using '--component_mode' (gene mode) with the corresponding gene-based files.  Both transcript-level and gene-level data can be loaded into the single Trinotate.sqlite instance for analysis.
+The above is based on using the transcript-level abundance estimates and corresponding DE analyses.  Abundance estimation and DE analysis can be performed at the 'gene' level as well.  Optionally, run the above using '--gene_mode' with the corresponding gene-based files.  Both transcript-level and gene-level data can be loaded into the single Trinotate.sqlite instance for analysis.
 
 == Populate Trinotate.sqlite with Transcript Expression Clusters ==
 
@@ -42,7 +44,7 @@ The Trinity analysis framework describes methods for clustering transcripts base
        --sqlite Trinotate.sqlite \
        edgeR_trans/diffExpr.P0.001_C2.matrix.R.all.RData.clusters_fixed_P_20/*matrix
 
-The step of defining expression clusters can be run multiple times using different parameters according to the http://trinityrnaseq.sourceforge.net/analysis/diff_expression_analysis.html[Trinity documentation].  Each set of clusters can be loaded in separately as above and then separately studied within TrinotateWeb.
+The step of defining expression clusters can be run multiple times using different parameters according to the https://github.com/trinityrnaseq/trinityrnaseq/wiki/Trinity-Differential-Expression[Trinity documentation].  Each set of clusters can be loaded in separately as above and then separately studied within TrinotateWeb.
 
 
 == Populate Trinotate.sqlite with Annotation Text ==
@@ -67,13 +69,16 @@ Simply './runMe.sh' in that directory to generate the fully populated 'Trinotate
 
 == Running TrinotateWeb ==
 
-To run TrinotateWeb, you'll need a light-weight webserver installed. We recommend using http://cesanta.com/mongoose.shtml[mongoose], which is free and easy to obtain for Linux.  For installation on Mac, I found it's easiest to use http://brew.sh/[homebrew] and install via 'brew install mongoose'.
+To run TrinotateWeb, you'll need a light-weight webserver installed. We recommend using https://www.lighttpd.net/[lighttpd], which is free and easy to obtain for Linux and Mac. Once installed, you can launch it via:
 
-   cd $TRINOTATE_HOME/TrinotateWeb/
+   cd $TRINOTATE_HOME
 
-   ./run_mongoose_webserver.sh 
+   ./run_TrinotateWebserver.pl 8080
 
 and leave it running within your terminal window.  To stop it, type cntrl-C or exit the terminal.
+
+[NOTE]
+The number 8080 is the port at which it will be listening to connections from your web browser. You can use whatever open port is available.
 
 Then, go to your web browser and visit the URL:  'http://localhost:8080/cgi-bin/index.cgi'
 
