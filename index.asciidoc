@@ -155,13 +155,12 @@ NOTE: This step will undoubtedly take the longest, for very large files executio
 |
 | blastp -query transdecoder.pep -db uniprot_sprot.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastp.outfmt6
 |
-| Note: In addition to searching uniprot_sprot.pep, you can search any other protein database and load the results in 
-|       as a custom protein database.
-|       Searching Swissprot, however, is critical to Trinotate, because that's where it retrieves the various
-|       Kegg, GO, and Eggnog, etc., annotations from.
-|
 |======================================================================================================
-NOTE: num_threads should be equal to the amount of cores available
+
+[ Note]
+In addition to searching uniprot_sprot.pep, you can search any other protein database and load the results in as a custom protein database. Searching Swissprot, however, is critical to Trinotate, because that's where it retrieves the various Kegg, GO, and Eggnog, etc., annotations from.
+
+Note: num_threads should be equal to the amount of cores available
 
 [NOTE]
 If you have access to a compute farm running LSF, SGE, PBS, or SLURM, consider using http://HpcGridRunner.github.io[HPC GridRunner] to maximally parallelize your blast searches. 
