@@ -8,19 +8,23 @@ image::images/TrinotateLogo.png[Trinotate image]
 
 [NOTE]
 .Trinotate Breaking News
-========================
-- Feb, 2015: Trinotate moves to Github
-- Feb, 2015: Trinotate release v2.0 is now available (see below)
-- Feb, 2015: link:TrinotateWeb.html[TrinotateWeb] is becoming more useful, the interface was given a facelift including other various performance improvements.
-========================
+================================================================================================
+- March, 2016: Trinity V3.0 is released.  New features include:
+- include custom protein database search results
+- autoTrinotate script for automating all computations and loading the database.
+- Kegg annotations are now reported.
+- Make your own 'fresh' boilerplate database anytime, or use a pre-generated one. Your choice.
+- Lighttpd webserver support for TrinotateWeb
+- Boilerplate database is now tiny compared to previous versions.
+- Uniprot/Trembl/Uniref90 not integrated directly, but searched as a custom database if desired.
+===============================================================================================
 
 
 == Background ==
 
-Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (BLAST+/SwissProt/Uniref90), protein domain identification (HMMER/PFAM), protein signal peptide and transmembrane domain prediction (singalP/tmHMM), and comparison to currently curated annotation databases (EMBL Uniprot eggNOG/GO Pathways databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.
+Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (BLAST+/SwissProt), protein domain identification (HMMER/PFAM), protein signal peptide and transmembrane domain prediction (signalP/tmHMM), and leveraging various annotation databases (eggNOG/GO/Kegg databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.
 
-[NOTE]
-Trinotate now includes link:TrinotateWeb.html[TrinotateWeb], which provide a graphical interface for navigating transcriptome annotations and analyzing transcript expression and differential expression using the Trinity/RSEM/Bioconductor analysis framework. 
+Trinotate includes link:TrinotateWeb.html[TrinotateWeb], which provides a locally-driven web-based graphical interface for navigating transcriptome annotations and analyzing transcript expression and differential expression using the Trinity/RSEM/Bioconductor analysis framework. 
 
 image::images/trinityWebLogo.png["TrinityWeb logo", width=350]
 
@@ -47,8 +51,14 @@ image::images/trinityWebLogo.png["TrinityWeb logo", width=350]
 'http://trinotate.github.io' https://github.com/Trinotate/Trinotate/releases[download Trinotate]
 
 
-- Trinity (includes TransDecoder and support for expression and DE analysis using RSEM and Bioconductor):
+- Trinity (includes support for expression and DE analysis using RSEM and Bioconductor):
 'http://trinityrnaseq.github.io/' https://github.com/trinityrnaseq/trinityrnaseq/releases[download Trinity].
+>Note, Trinity is not absolutely required.  It is possible to use Trinotate with other sources of transcript data as long as suitable inputs are available.
+
+
+- TransDecoder for predicting coding regions in transcripts
+'http://transdecoder.github.io' https://github.com/TransDecoder/TransDecoder/releases[download TransDecoder].
+
 
 - sqlite (required for database integration):
 http://www.sqlite.org/
@@ -66,7 +76,6 @@ http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?signalp
 
   You should edit the following line to read like so, increasing the max number of entries that can be processed:
   my $MAX_ALLOWED_ENTRIES=2000000;  # default is only 2000
-
 
 - tmhmm v2 (free academic download)
 http://www.cbs.dtu.dk/cgi-bin/nph-sw_request?tmhmm
@@ -91,25 +100,17 @@ http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
 [[SequencesRequired]]
 == Sequence Databases Required ==
 
-Trinotate is built around specific releases of SwissProt and Pfam, and custom protein files are generated for use with Trinotate. It is imperative that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:
+Trinotate is *built around specific releases of SwissProt and Pfam*, and custom protein files are generated for use with Trinotate. *It is imperative* that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:
 
 SwissProt
-https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz[Download SwissProt here]
+https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/uniprot_sprot.pep.gz[Download SwissProt here]
 
     be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
-    mv uniprot_sprot.trinotate_v2.0.pep.gz uniprot_sprot.trinotate.pep.gz
-    gunzip uniprot_sprot.trinotate.pep.gz
-    makeblastdb -in uniprot_sprot.trinotate.pep -dbtype prot
-
-Uniref90
-https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz[Download Uniref90 here]
-
-    mv uniprot_uniref90.trinotate_v2.0.pep.gz uniprot_uniref90.trinotate.pep.gz
-    gunzip uniprot_uniref90.trinotate.pep.gz
-    makeblastdb -in uniprot_uniref90.trinotate.pep -dbtype prot
+    gunzip uniprot_sprot.pep.gz
+    makeblastdb -in uniprot_sprot.pep -dbtype prot
 
 Pfam domains
-https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz[Download Pfam-A here]
+https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Pfam-A.hmm.gz[Download Pfam-A here]
 
    Uncompress and prepare it for use with 'hmmscan' like so:
    gunzip Pfam-A.hmm.gz
@@ -118,7 +119,7 @@ https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz[D
 [[SeqAnalyses]]
 = Running Sequence Analyses =
 
-Both the Trinity-assembled transcripts and any predicted protein-coding regions are subject to analysis using the various strategies below.
+Both the transcripts and any predicted protein-coding regions are subject to analysis using the various strategies below.
 
 Trinity transcripts are searched for sequence homologies using BLASTX, and RNAMMER is used to identify potential rRNA transcripts.
 
@@ -148,17 +149,16 @@ NOTE: This step will undoubtedly take the longest, for very large files executio
 | Blast Commands
 |
 | # search Trinity transcripts
-| blastx -query Trinity.fasta -db uniprot_sprot.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
+| blastx -query Trinity.fasta -db uniprot_sprot.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastx.outfmt6
 |
 | # search Transdecoder-predicted proteins
 |
-| blastp -query transdecoder.pep -db uniprot_sprot.trinotate.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastp.outfmt6
+| blastp -query transdecoder.pep -db uniprot_sprot.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 > blastp.outfmt6
 |
-| # Optional: perform similar searches using uniref90 as the target database, rename output files accordingly.
-|
-|      blastx -query Trinity.fasta -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 > uniref90.blastx.outfmt6
-|
-|      blastp -query transdecoder.pep -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 > uniref90.blastp.outfmt6
+| Note: In addition to searching uniprot_sprot.pep, you can search any other protein database and load the results in 
+|       as a custom protein database.
+|       Searching Swissprot, however, is critical to Trinotate, because that's where it retrieves the various
+|       Kegg, GO, and Eggnog, etc., annotations from.
 |
 |======================================================================================================
 NOTE: num_threads should be equal to the amount of cores available
@@ -243,7 +243,7 @@ The following commands will import the results from the bioinformatic computes p
 
 
 
-   usage: ./Trinotate <sqlite.db> <command> <input> [...]
+    usage: Trinotate <sqlite.db> <command> <input> [...]
 
 
      <commands>: 
@@ -255,7 +255,6 @@ The following commands will import the results from the bioinformatic computes p
          * Transdecoder protein search results:
 
              LOAD_swissprot_blastp <file>
-             LOAD_trembl_blastp <file>
              LOAD_pfam <file>
              LOAD_tmhmm <file>
              LOAD_signalp <file>
@@ -263,12 +262,20 @@ The following commands will import the results from the bioinformatic computes p
           * Trinity transcript search results:
 
              LOAD_swissprot_blastx <file>
-             LOAD_trembl_blastx <file>
              LOAD_rnammer <file>
              
+
+          * Load custom blast results using any searchable database
+
+
+             LOAD_custom_blast --outfmt6 <file> --prog <blastp|blastx> --dbtype <database_name>
+
+
           * report generation:
 
              report [ -E (default: 1e-5) ] [--pfam_cutoff DNC|DGC|DTC|SNC|SGC|STC (default: DNC=domain noise cutoff)]
+
+
 
 
 
@@ -279,7 +286,7 @@ Follow the steps below to obtain a boilerplate Trinotate sqlite database and pop
 
 A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:
 
-   wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz
+   wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v3.sqlite.gz" -O Trinotate.sqlite.gz
 
 
 Uncompress it like so:
@@ -287,7 +294,10 @@ Uncompress it like so:
    gunzip Trinotate.sqlite.gz
 
 [NOTE]
-The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Feb, 2015).
+The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Trinotate v3).
+
+[NOTE]
+This boilerplate database comes with all annotation resources loaded into it, including swissprot record information, and will reflect the data that was available at the time of the build.   If for whatever reason you want to create your own boilerplate database based on the data available at current time, you can run the '$TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl' script in a clean workspace, and it will pull down all the currently available data sets and build the boilerplate sqlite database based on their contents.
 
 
 == Load transcripts and coding regions  ==
@@ -299,6 +309,9 @@ Begin populating the sqlite database by loading three data types:
 - Gene/Transcript relationships (tab delimited format: "gene_id(tab)transcript_id", same as used by the RSEM software).  If you are using Trinity assemblies, you can generate this file like so: 
 
      $TRINITY_HOME/util/support_scripts/get_Trinity_gene_to_trans_map.pl Trinity.fasta >  Trinity.fasta.gene_trans_map
+
+[NOTE]
+If you're not using Trinity transcript assemblies, then it's up to you to provide the correspinding gene-to-transcript mapping file.
 
 Load these info into the Trinotate sqlite database like so (example, using Trinity assemblies):
 
@@ -313,13 +326,13 @@ Load these info into the Trinotate sqlite database like so (example, using Trini
  # load transcript hits
  Trinotate Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6
 
-Optional: load Uniref90 blast hits (requires the more comprehensive boilerplate database, as described above):
+Optional: load custom database blast hits:
 
  # load protein hits
- Trinotate Trinotate.sqlite LOAD_trembl_blastp uniref90.blastp.outfmt6
+ Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastp.outfmt6 --prog blastp --dbtype custom_db_name
 
  # load transcript hits
- Trinotate Trinotate.sqlite LOAD_trembl_blastx uniref90.blastx.outfmt6
+ Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastx.outfmt6 --prog blastx --dbtype custom_db_name
 
 
 == Load Pfam domain entries ==
@@ -360,51 +373,73 @@ The output has the following column headers:
 
  0       #gene_id
  1       transcript_id
- 2       Top_BLASTX_hit
+ 2       sprot_Top_BLASTX_hit
  3       RNAMMER
  4       prot_id
  5       prot_coords
- 6       Top_BLASTP_hit
- 7       Pfam
- 8       SignalP
- 9       TmHMM
- 10      eggnog
- 11      gene_ontology
+ 6       sprot_Top_BLASTP_hit
+ 7       custom_pombe_pep_BLASTX
+ 8       custom_pombe_pep_BLASTP
+ 9       Pfam
+ 10      SignalP
+ 11      TmHMM
+ 12      eggnog
+ 13      Kegg
+ 14      gene_ontology_blast
+ 15      gene_ontology_pfam
+ 16      transcript
+ 17      peptide
 
 
 and the data are formatted like so:
 
- # example protein-coding transcript
- 0       comp66_c0
- 1       comp66_c0_seq1
- 2       sp|Q09739|MCP7_SCHPO^Q09739^Q:1-519,H:15-187^100%ID^E:5e-95^RecName: Full=Meiotic coiled-coil protein 7; AltName: Full=Meiotically up-regulated gene 32 protein;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+ 0       TRINITY_DN179_c0_g1
+ 1       TRINITY_DN179_c0_g1_i1
+ 2       GCS1_SCHPO^GCS1_SCHPO^Q:53-2476,H:1-808^100%ID^E:0^RecName: Full=Probable mannosyl-oligosaccharide glucosidase;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces
  3       .
- 4       m.4
- 5       1-522[+]
- 6       sp|Q5XGY9|MND1_XENLA^Q5XGY9^Q:4-169,H:19-181^37.13%ID^E:7e-24^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia; Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae; Xenopus; Xenopus.`sp|Q9BWT6|MND1_HUMAN^Q9BWT6^Q:4-169,H:19-181^38.32%ID^E:1e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae; Homo.`sp|Q32L19|MND1_BOVIN^Q32L19^Q:4-169,H:19-181^38.92%ID^E:3e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos.`sp|Q6DC61|MND1_DANRE^Q6DC61^Q:4-158,H:19-170^40.13%ID^E:3e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Ostariophysi; Cypriniformes; Cyprinidae; Danio.`sp|Q8GYD2|MND1_ARATH^Q8GYD2^Q:4-168,H:19-179^40.36%ID^E:3e-22^RecName: Full=Meiotic nuclear division protein 1 homolog; Short=AtMND1; AltName: Full=Meiotic nuclear division 1-like protein;^Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta; Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; rosids; malvids; Brassicales; Brassicaceae; Camelineae; Arabidopsis.
- 7       PF03962.10^Mnd1^Mnd1 family^1-170^E:1.9e-51
- 8       .
- 9       .
+ 4       TRINITY_DN179_c0_g1_i1|m.1
+ 5       2-2479[+]
+ 6       GCS1_SCHPO^GCS1_SCHPO^Q:18-825,H:1-808^100%ID^E:0^RecName: Full=Probable mannosyl-oligosaccharide glucosidase;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces
+ 7       SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^Q:53-2476,H:1-808^100%ID^E:0^.^.
+ 8       SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^Q:18-825,H:1-808^100%ID^E:0^.^.
+ 9       PF16923.2^Glyco_hydro_63N^Glycosyl hydrolase family 63 N-terminal domain^58-275^E:6.9e-60`PF03200.13^Glyco_hydro_63^Glycosyl hydrolase family 63 C-terminal domain^315-823^E:5.1e-187
  10      .
- 11      GO:0005634^cellular_component^nucleus`GO:0006310^biological_process^DNA recombination`GO:0007126^biological_process^meiosis
+ 11      .
+ 12      .
+ 13      KEGG:spo:SPAC6G10.09`KO:K01228
+ 14      GO:0005783^cellular_component^endoplasmic reticulum`GO:0005789^cellular_component^endoplasmic reticulum membrane`GO:0016021^cellular_component^integral component of membrane`GO:0004573^molecular_function^mannosyl-oligosaccharide glucosidase activity`GO:0009272^biological_process^fungal-type cell wall biogenesis`GO:0009311^biological_process^oligosaccharide metabolic process`GO:0006487^biological_process^protein N-linked glycosylation
+ 15      .
+ 16      .
+ 17      .
+
+[NOTE]
+Include options 'report --incl_pep --incl_trans' to add the protein and transcript sequence data in the above tab delimited report.
 
 
  # Example rRNA entry
 
- 0   comp4721_c0
- 1   comp4721_c0_seq1
- 2   .
- 3   18s_rRNA^1294-3134
- 4   .
- 5   .
- 6   .
- 7   .
- 8   .
- 9   .
- 10  .
- 11  .
+ 0       TRINITY_DN2464_c0_g1
+ 1       TRINITY_DN2464_c0_g1_i1 
+ 2       ART2_YEAST^ART2_YEAST^Q:6813-6646,H:1-56^85.71%ID^E:2e-23^RecName: Full=Putative uncharacterized protein ART2;^Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina; Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharo
+myces
+ 3       18s_rRNA^1258-3098`28s_rRNA^3521-7502
+ 4       TRINITY_DN2464_c0_g1_i1|m.606
+ 5       6628-6960[-]
+ 6       ART2_YEAST^ART2_YEAST^Q:50-105,H:1-56^85.71%ID^E:3e-28^RecName: Full=Putative uncharacterized protein ART2;^Eukaryota; Fungi; Dikarya ; Ascomycota; Saccharomycotina; Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces
+ 7       .
+ 8       .
+ 9       .
+ 10      .
+ 11      .
+ 12      .
+ 13      .
+ 14      .
+ 15      .
+ 16      .
+ 17      .
 
-
+[NOTE]
+The Trinity-assembled 18S/28S S. pombe rRNA region includes a TransDecoer predicted ORF with a blast match to an S. cerevisiae protein "Antisense to ribosomal RNA transcript protein 2 (ART2).
 
 Backticks (\`) and carets (\^) are used as delimiters for data packed within an individual field, such as separating E-values, percent identity, and taxonomic info for best matches. When there are multiple assignments in a given field, the assignments are separated by (\`) and the fields within an assignment are separated by (\^).  In a future release (post Feb-2013), the backticks and carets will be used more uniformly than above, such as carets as BLAST field separators, and including more than the top hit.
 
@@ -413,7 +448,7 @@ Backticks (\`) and carets (\^) are used as delimiters for data packed within an 
 
 Sample data and a 'runMe.sh' script are available at $TRINOTATE_HOME/sample_data/
 
-Executing the 'runMe.sh' script will pull down the Trinotate sqlite database, populate with the provided bioinformatics computes, and generate the final Trinotate annotation report.  In addition, pre-computed expression and DE analyses will be loaded for use with TrinotateWeb.
+Executing the 'runMe.sh' script will pull down the Trinotate sqlite boilerplate database, populate with the provided bioinformatics computes, and generate the final Trinotate annotation report.  In addition, pre-computed expression and DE analyses will be loaded for use with TrinotateWeb.
 
 [[LitRefs]]
 = Literature references for software used for functional annotation =

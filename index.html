@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
 <title>Trinotate: Transcriptome Functional Annotation and Analysis</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,9 +94,7 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-pre {
-  white-space: pre-wrap;
-}
+
 
 #author {
   color: #527bbd;
@@ -225,7 +223,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; vertical-align: text-bottom; }
+span.image img { border-style: none; }
 a.image:visited { color: white; }
 
 dl {
@@ -753,47 +751,47 @@ asciidoc.install();
 <div class="ulist"><ul>
 <li>
 <p>
-Feb, 2015: Trinotate moves to Github
+March, 2016: Trinity V3.0 is released.  New features include:
 </p>
 </li>
 <li>
 <p>
-Feb, 2015: Trinotate release v2.0 is now available (see below)
+include custom protein database search results
 </p>
 </li>
 <li>
 <p>
-Feb, 2015: <a href="TrinotateWeb.html">TrinotateWeb</a> is becoming more useful, the interface was given a facelift including other various performance improvements.
+autoTrinotate script for automating all computations and loading the database.
+</p>
+</li>
+<li>
+<p>
+Kegg annotations are now reported.
+</p>
+</li>
+<li>
+<p>
+Make your own <em>fresh</em> boilerplate database anytime, or use a pre-generated one. Your choice.
+</p>
+</li>
+<li>
+<p>
+Lighttpd webserver support for TrinotateWeb
+</p>
+</li>
+<li>
+<p>
+Boilerplate database is now tiny compared to previous versions.
 </p>
 </li>
 </ul></div>
-</td>
-</tr></table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_background">Background</h2>
-<div class="sectionbody">
-<div class="paragraph"><p>Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (BLAST+/SwissProt/Uniref90), protein domain identification (HMMER/PFAM), protein signal peptide and transmembrane domain prediction (singalP/tmHMM), and comparison to currently curated annotation databases (EMBL Uniprot eggNOG/GO Pathways databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.</p></div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">Trinotate now includes <a href="TrinotateWeb.html">TrinotateWeb</a>, which provide a graphical interface for navigating transcriptome annotations and analyzing transcript expression and differential expression using the Trinity/RSEM/Bioconductor analysis framework.</td>
-</tr></table>
-</div>
+<div class="paragraph"><p>Trinotate is a comprehensive annotation suite designed for automatic functional annotation of transcriptomes, particularly de novo assembled transcriptomes, from model or non-model organisms. Trinotate makes use of a number of different well referenced methods for functional annotation including homology search to known sequence data (BLAST+/SwissProt), protein domain identification (HMMER/PFAM), protein signal peptide and transmembrane domain prediction (signalP/tmHMM), and leveraging various annotation databases (eggNOG/GO/Kegg databases). All functional annotation data derived from the analysis of transcripts is integrated into a SQLite database which allows fast efficient searching for terms with specific qualities related to a desired scientific hypothesis or a means to create a whole annotation report for a transcriptome.</p></div>
+<div class="paragraph"><p>Trinotate includes <a href="TrinotateWeb.html">TrinotateWeb</a>, which provides a locally-driven web-based graphical interface for navigating transcriptome annotations and analyzing transcript expression and differential expression using the Trinity/RSEM/Bioconductor analysis framework.</p></div>
 <div class="imageblock">
 <div class="content">
 <img src="images/trinityWebLogo.png" alt="TrinityWeb logo" width="350" />
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_table_of_contents">1. Table of Contents</h2>
-<div class="sectionbody">
 <div class="ulist"><ul>
 <li>
 <p>
@@ -836,13 +834,7 @@ Feb, 2015: <a href="TrinotateWeb.html">TrinotateWeb</a> is becoming more useful,
 </p>
 </li>
 </ul></div>
-</div>
-</div>
-<h1 id="SoftwareRequired">Software and Data Required</h1>
-<div class="sect1">
-<h2 id="_software_required">1. Software Required</h2>
-<div class="sectionbody">
-<div class="ulist"><ul>
+<div class="ulist" id="SoftwareRequired"><ul>
 <li>
 <p>
 Trinotate
@@ -851,8 +843,15 @@ Trinotate
 </li>
 <li>
 <p>
-Trinity (includes TransDecoder and support for expression and DE analysis using RSEM and Bioconductor):
+Trinity (includes support for expression and DE analysis using RSEM and Bioconductor):
 <em>http://trinityrnaseq.github.io/</em> <a href="https://github.com/trinityrnaseq/trinityrnaseq/releases">download Trinity</a>.
+&gt;Note, Trinity is not absolutely required.  It is possible to use Trinotate with other sources of transcript data as long as suitable inputs are available.
+</p>
+</li>
+<li>
+<p>
+TransDecoder for predicting coding regions in transcripts
+<em>http://transdecoder.github.io</em> <a href="https://github.com/TransDecoder/TransDecoder/releases">download TransDecoder</a>.
 </p>
 </li>
 <li>
@@ -921,46 +920,26 @@ $HMMSEARCH_BINARY = "/path/to/hmmsearch2";</code></pre>
 </div></div>
 </li>
 </ul></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="SequencesRequired">2. Sequence Databases Required</h2>
-<div class="sectionbody">
-<div class="paragraph"><p>Trinotate is built around specific releases of SwissProt and Pfam, and custom protein files are generated for use with Trinotate. It is imperative that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:</p></div>
+<div class="paragraph" id="SequencesRequired"><p>Trinotate is <strong>built around specific releases of SwissProt and Pfam</strong>, and custom protein files are generated for use with Trinotate. <strong>It is imperative</strong> that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:</p></div>
 <div class="paragraph"><p>SwissProt
-<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_sprot.trinotate_v2.0.pep.gz">Download SwissProt here</a></p></div>
+<a href="https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/uniprot_sprot.pep.gz">Download SwissProt here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
-mv uniprot_sprot.trinotate_v2.0.pep.gz uniprot_sprot.trinotate.pep.gz
-gunzip uniprot_sprot.trinotate.pep.gz
-makeblastdb -in uniprot_sprot.trinotate.pep -dbtype prot</code></pre>
-</div></div>
-<div class="paragraph"><p>Uniref90
-<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/uniprot_uniref90.trinotate_v2.0.pep.gz">Download Uniref90 here</a></p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>mv uniprot_uniref90.trinotate_v2.0.pep.gz uniprot_uniref90.trinotate.pep.gz
-gunzip uniprot_uniref90.trinotate.pep.gz
-makeblastdb -in uniprot_uniref90.trinotate.pep -dbtype prot</code></pre>
+gunzip uniprot_sprot.pep.gz
+makeblastdb -in uniprot_sprot.pep -dbtype prot</code></pre>
 </div></div>
 <div class="paragraph"><p>Pfam domains
-<a href="https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
+<a href="https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>Uncompress and prepare it for use with 'hmmscan' like so:
 gunzip Pfam-A.hmm.gz
 hmmpress Pfam-A.hmm</code></pre>
 </div></div>
-</div>
-</div>
-<h1 id="SeqAnalyses">Running Sequence Analyses</h1>
-<div class="paragraph"><p>Both the Trinity-assembled transcripts and any predicted protein-coding regions are subject to analysis using the various strategies below.</p></div>
+<div class="paragraph" id="SeqAnalyses"><p>Both the transcripts and any predicted protein-coding regions are subject to analysis using the various strategies below.</p></div>
 <div class="paragraph"><p>Trinity transcripts are searched for sequence homologies using BLASTX, and RNAMMER is used to identify potential rRNA transcripts.</p></div>
 <div class="paragraph"><p>Transdecoder-predicted coding regions are also searched for sequence homologies using BLASTP, protein domains identified via a Pfam search, and additional properties such as signal peptides and likely transmembrane-spanning regions are explored.</p></div>
-<div class="sect1">
-<h2 id="_files_needed_for_execution">1. Files needed for execution</h2>
-<div class="sectionbody">
 <div class="ulist"><ul>
 <li>
 <p>
@@ -973,11 +952,6 @@ hmmpress Pfam-A.hmm</code></pre>
 </p>
 </li>
 </ul></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_capturing_blast_homologies">2. Capturing BLAST Homologies</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/BLAST.png" alt="Blast image" />
@@ -1006,7 +980,7 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"># search Trinity transcripts</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_sprot.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastx.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_sprot.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastx.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -1018,25 +992,22 @@ cellspacing="0" cellpadding="4">
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_sprot.trinotate.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastp.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_sprot.pep  -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; blastp.outfmt6</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"># Optional: perform similar searches using uniref90 as the target database, rename output files accordingly.</p></td>
+<td align="left" valign="top"><p class="table">Note: In addition to searching uniprot_sprot.pep, you can search any other protein database and load the results in</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"></p></td>
+<td align="left" valign="top"><p class="table">as a custom protein database.</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table">blastx -query Trinity.fasta -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastx.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">Searching Swissprot, however, is critical to Trinotate, because that&#8217;s where it retrieves the various</p></td>
 </tr>
 <tr>
-<td align="left" valign="top"><p class="table"></p></td>
-</tr>
-<tr>
-<td align="left" valign="top"><p class="table">blastp -query transdecoder.pep -db uniprot_uniref90.trinotate.pep -num_threads 8 -max_target_seqs 1 -outfmt 6 &gt; uniref90.blastp.outfmt6</p></td>
+<td align="left" valign="top"><p class="table">Kegg, GO, and Eggnog, etc., annotations from.</p></td>
 </tr>
 <tr>
 <td align="left" valign="top"><p class="table"></p></td>
@@ -1060,11 +1031,6 @@ cellspacing="0" cellpadding="4">
 <td class="content">If you have access to a compute farm running LSF, SGE, PBS, or SLURM, consider using <a href="http://HpcGridRunner.github.io">HPC GridRunner</a> to maximally parallelize your blast searches.</td>
 </tr></table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_running_hmmer_to_identify_protein_domains">3. Running HMMER to identify protein domains</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/HMMER.PNG" alt="HMMER image" />
@@ -1102,11 +1068,6 @@ cellspacing="0" cellpadding="4">
 <td class="content">num_threads should be equal to the number of cores available</td>
 </tr></table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_running_signalp_to_predict_signal_peptides">4. Running signalP to predict signal peptides</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/signalP.PNG" alt="SIGNALP image" />
@@ -1136,11 +1097,6 @@ cellspacing="0" cellpadding="4">
 </tbody>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_running_tmhmm_to_predict_transmembrane_regions">5. Running tmHMM to predict transmembrane regions</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/tmhmm.PNG" alt="TMHMM image" />
@@ -1170,11 +1126,6 @@ cellspacing="0" cellpadding="4">
 </tbody>
 </table>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_running_rnammer_to_identify_rrna_transcripts">6. Running RNAMMER to identify rRNA transcripts</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/rnammer.png" alt="RNAMMER image" />
@@ -1206,13 +1157,10 @@ cellspacing="0" cellpadding="4">
 <pre><code>$TRINOTATE_HOME/util/rnammer_support/RnammerTranscriptome.pl --transcriptome Trinity.fasta --path_to_rnammer /usr/bin/software/rnammer_v1.2/rnammer</code></pre>
 </div></div>
 <div class="paragraph"><p>Once complete, it will have generated a file: <em>Trinity.fasta.rnammer.gff</em>, which can be loaded into Trinotate as described in sections below.</p></div>
-</div>
-</div>
-<h1 id="LoadingSQLite">Trinotate: Loading Above Results into a Trinotate SQLite Database</h1>
-<div class="paragraph"><p>The following commands will import the results from the bioinformatic computes performed above into a Trinotate SQLite database. All operations are performed using the included <em>Trinotate</em> utility.  Usage is like so:</p></div>
+<div class="paragraph" id="LoadingSQLite"><p>The following commands will import the results from the bioinformatic computes performed above into a Trinotate SQLite database. All operations are performed using the included <em>Trinotate</em> utility.  Usage is like so:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>usage: ./Trinotate &lt;sqlite.db&gt; &lt;command&gt; &lt;input&gt; [...]</code></pre>
+<pre><code>usage: Trinotate &lt;sqlite.db&gt; &lt;command&gt; &lt;input&gt; [...]</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
@@ -1235,7 +1183,6 @@ Transdecoder protein search results:
 <div class="literalblock">
 <div class="content">
 <pre><code>LOAD_swissprot_blastp &lt;file&gt;
-LOAD_trembl_blastp &lt;file&gt;
 LOAD_pfam &lt;file&gt;
 LOAD_tmhmm &lt;file&gt;
 LOAD_signalp &lt;file&gt;</code></pre>
@@ -1248,8 +1195,16 @@ Trinity transcript search results:
 <div class="literalblock">
 <div class="content">
 <pre><code>LOAD_swissprot_blastx &lt;file&gt;
-LOAD_trembl_blastx &lt;file&gt;
 LOAD_rnammer &lt;file&gt;</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+Load custom blast results using any searchable database
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>LOAD_custom_blast --outfmt6 &lt;file&gt; --prog &lt;blastp|blastx&gt; --dbtype &lt;database_name&gt;</code></pre>
 </div></div>
 </li>
 <li>
@@ -1263,13 +1218,10 @@ report generation:
 </li>
 </ul></div>
 <div class="paragraph"><p>Follow the steps below to obtain a boilerplate Trinotate sqlite database and populate it with your data.</p></div>
-<div class="sect1">
-<h2 id="_retrieve_the_trinotate_pre_generated_resource_sqlite_database">1. Retrieve the Trinotate Pre-generated Resource SQLite database</h2>
-<div class="sectionbody">
 <div class="paragraph"><p>A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>wget "https://data.broadinstitute.org/Trinity/Trinotate_v2.0_RESOURCES/Trinotate.sprot_uniref90.20150131.boilerplate.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
+<pre><code>wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v3.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
 </div></div>
 <div class="paragraph"><p>Uncompress it like so:</p></div>
 <div class="literalblock">
@@ -1281,14 +1233,17 @@ report generation:
 <td class="icon">
 <div class="title">Note</div>
 </td>
-<td class="content">The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Feb, 2015).</td>
+<td class="content">The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Trinotate v3).</td>
 </tr></table>
 </div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">This boilerplate database comes with all annotation resources loaded into it, including swissprot record information, and will reflect the data that was available at the time of the build.   If for whatever reason you want to create your own boilerplate database based on the data available at current time, you can run the <em>$TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl</em> script in a clean workspace, and it will pull down all the currently available data sets and build the boilerplate sqlite database based on their contents.</td>
+</tr></table>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_load_transcripts_and_coding_regions">2. Load transcripts and coding regions</h2>
-<div class="sectionbody">
 <div class="paragraph"><p>Begin populating the sqlite database by loading three data types:</p></div>
 <div class="ulist"><ul>
 <li>
@@ -1311,16 +1266,19 @@ Gene/Transcript relationships (tab delimited format: "gene_id(tab)transcript_id"
 </div></div>
 </li>
 </ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">If you&#8217;re not using Trinity transcript assemblies, then it&#8217;s up to you to provide the correspinding gene-to-transcript mapping file.</td>
+</tr></table>
+</div>
 <div class="paragraph"><p>Load these info into the Trinotate sqlite database like so (example, using Trinity assemblies):</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code>Trinotate Trinotate.sqlite init --gene_trans_map Trinity.fasta.gene_trans_map --transcript_fasta Trinity.fasta --transdecoder_pep transdecoder.pep</code></pre>
 </div></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_loading_blast_homologies">3. Loading BLAST homologies</h2>
-<div class="sectionbody">
 <div class="literalblock">
 <div class="content">
 <pre><code># load protein hits
@@ -1331,48 +1289,30 @@ Trinotate Trinotate.sqlite LOAD_swissprot_blastp blastp.outfmt6</code></pre>
 <pre><code># load transcript hits
 Trinotate Trinotate.sqlite LOAD_swissprot_blastx blastx.outfmt6</code></pre>
 </div></div>
-<div class="paragraph"><p>Optional: load Uniref90 blast hits (requires the more comprehensive boilerplate database, as described above):</p></div>
+<div class="paragraph"><p>Optional: load custom database blast hits:</p></div>
 <div class="literalblock">
 <div class="content">
 <pre><code># load protein hits
-Trinotate Trinotate.sqlite LOAD_trembl_blastp uniref90.blastp.outfmt6</code></pre>
+Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastp.outfmt6 --prog blastp --dbtype custom_db_name</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
 <pre><code># load transcript hits
-Trinotate Trinotate.sqlite LOAD_trembl_blastx uniref90.blastx.outfmt6</code></pre>
+Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastx.outfmt6 --prog blastx --dbtype custom_db_name</code></pre>
 </div></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_load_pfam_domain_entries">4. Load Pfam domain entries</h2>
-<div class="sectionbody">
 <div class="literalblock">
 <div class="content">
 <pre><code>Trinotate Trinotate.sqlite LOAD_pfam TrinotatePFAM.out</code></pre>
 </div></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_load_transmembrane_domains">5. Load transmembrane domains</h2>
-<div class="sectionbody">
 <div class="literalblock">
 <div class="content">
 <pre><code>Trinotate Trinotate.sqlite LOAD_tmhmm tmhmm.out</code></pre>
 </div></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_load_signal_peptide_predictions">6. Load signal peptide predictions</h2>
-<div class="sectionbody">
 <div class="literalblock">
 <div class="content">
 <pre><code>Trinotate Trinotate.sqlite LOAD_signalp signalp.out</code></pre>
 </div></div>
-</div>
-</div>
-<h1 id="OutputReport">Trinotate: Output an Annotation Report</h1>
-<div class="literalblock">
+<div class="literalblock" id="OutputReport">
 <div class="content">
 <pre><code>Trinotate Trinotate.sqlite report [opts] &gt; trinotate_annotation_report.xls</code></pre>
 </div></div>
@@ -1398,59 +1338,91 @@ Trinotate Trinotate.sqlite LOAD_trembl_blastx uniref90.blastx.outfmt6</code></pr
 <div class="content">
 <pre><code>0       #gene_id
 1       transcript_id
-2       Top_BLASTX_hit
+2       sprot_Top_BLASTX_hit
 3       RNAMMER
 4       prot_id
 5       prot_coords
-6       Top_BLASTP_hit
-7       Pfam
-8       SignalP
-9       TmHMM
-10      eggnog
-11      gene_ontology</code></pre>
+6       sprot_Top_BLASTP_hit
+7       custom_pombe_pep_BLASTX
+8       custom_pombe_pep_BLASTP
+9       Pfam
+10      SignalP
+11      TmHMM
+12      eggnog
+13      Kegg
+14      gene_ontology_blast
+15      gene_ontology_pfam
+16      transcript
+17      peptide</code></pre>
 </div></div>
 <div class="paragraph"><p>and the data are formatted like so:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code># example protein-coding transcript
-0       comp66_c0
-1       comp66_c0_seq1
-2       sp|Q09739|MCP7_SCHPO^Q09739^Q:1-519,H:15-187^100%ID^E:5e-95^RecName: Full=Meiotic coiled-coil protein 7; AltName: Full=Meiotically up-regulated gene 32 protein;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces.
+<pre><code>0       TRINITY_DN179_c0_g1
+1       TRINITY_DN179_c0_g1_i1
+2       GCS1_SCHPO^GCS1_SCHPO^Q:53-2476,H:1-808^100%ID^E:0^RecName: Full=Probable mannosyl-oligosaccharide glucosidase;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces
 3       .
-4       m.4
-5       1-522[+]
-6       sp|Q5XGY9|MND1_XENLA^Q5XGY9^Q:4-169,H:19-181^37.13%ID^E:7e-24^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia; Batrachia; Anura; Pipoidea; Pipidae; Xenopodinae; Xenopus; Xenopus.`sp|Q9BWT6|MND1_HUMAN^Q9BWT6^Q:4-169,H:19-181^38.32%ID^E:1e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae; Homo.`sp|Q32L19|MND1_BOVIN^Q32L19^Q:4-169,H:19-181^38.92%ID^E:3e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos.`sp|Q6DC61|MND1_DANRE^Q6DC61^Q:4-158,H:19-170^40.13%ID^E:3e-23^RecName: Full=Meiotic nuclear division protein 1 homolog;^Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Actinopterygii; Neopterygii; Teleostei; Ostariophysi; Cypriniformes; Cyprinidae; Danio.`sp|Q8GYD2|MND1_ARATH^Q8GYD2^Q:4-168,H:19-179^40.36%ID^E:3e-22^RecName: Full=Meiotic nuclear division protein 1 homolog; Short=AtMND1; AltName: Full=Meiotic nuclear division 1-like protein;^Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta; Spermatophyta; Magnoliophyta; eudicotyledons; core eudicotyledons; rosids; malvids; Brassicales; Brassicaceae; Camelineae; Arabidopsis.
-7       PF03962.10^Mnd1^Mnd1 family^1-170^E:1.9e-51
-8       .
-9       .
+4       TRINITY_DN179_c0_g1_i1|m.1
+5       2-2479[+]
+6       GCS1_SCHPO^GCS1_SCHPO^Q:18-825,H:1-808^100%ID^E:0^RecName: Full=Probable mannosyl-oligosaccharide glucosidase;^Eukaryota; Fungi; Dikarya; Ascomycota; Taphrinomycotina; Schizosaccharomycetes; Schizosaccharomycetales; Schizosaccharomycetaceae; Schizosaccharomyces
+7       SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^Q:53-2476,H:1-808^100%ID^E:0^.^.
+8       SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^SPAC6G10_09_SPAC6G10_09_I_alpha_glucosidase_I_Gls1_predicte^Q:18-825,H:1-808^100%ID^E:0^.^.
+9       PF16923.2^Glyco_hydro_63N^Glycosyl hydrolase family 63 N-terminal domain^58-275^E:6.9e-60`PF03200.13^Glyco_hydro_63^Glycosyl hydrolase family 63 C-terminal domain^315-823^E:5.1e-187
 10      .
-11      GO:0005634^cellular_component^nucleus`GO:0006310^biological_process^DNA recombination`GO:0007126^biological_process^meiosis</code></pre>
+11      .
+12      .
+13      KEGG:spo:SPAC6G10.09`KO:K01228
+14      GO:0005783^cellular_component^endoplasmic reticulum`GO:0005789^cellular_component^endoplasmic reticulum membrane`GO:0016021^cellular_component^integral component of membrane`GO:0004573^molecular_function^mannosyl-oligosaccharide glucosidase activity`GO:0009272^biological_process^fungal-type cell wall biogenesis`GO:0009311^biological_process^oligosaccharide metabolic process`GO:0006487^biological_process^protein N-linked glycosylation
+15      .
+16      .
+17      .</code></pre>
 </div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">Include options <em>report --incl_pep --incl_trans</em> to add the protein and transcript sequence data in the above tab delimited report.</td>
+</tr></table>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre><code># Example rRNA entry</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>0   comp4721_c0
-1   comp4721_c0_seq1
-2   .
-3   18s_rRNA^1294-3134
-4   .
-5   .
-6   .
-7   .
-8   .
-9   .
-10  .
-11  .</code></pre>
+<pre><code> 0       TRINITY_DN2464_c0_g1
+ 1       TRINITY_DN2464_c0_g1_i1
+ 2       ART2_YEAST^ART2_YEAST^Q:6813-6646,H:1-56^85.71%ID^E:2e-23^RecName: Full=Putative uncharacterized protein ART2;^Eukaryota; Fungi; Dikarya; Ascomycota; Saccharomycotina; Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharo
+myces
+ 3       18s_rRNA^1258-3098`28s_rRNA^3521-7502
+ 4       TRINITY_DN2464_c0_g1_i1|m.606
+ 5       6628-6960[-]
+ 6       ART2_YEAST^ART2_YEAST^Q:50-105,H:1-56^85.71%ID^E:3e-28^RecName: Full=Putative uncharacterized protein ART2;^Eukaryota; Fungi; Dikarya ; Ascomycota; Saccharomycotina; Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces
+ 7       .
+ 8       .
+ 9       .
+ 10      .
+ 11      .
+ 12      .
+ 13      .
+ 14      .
+ 15      .
+ 16      .
+ 17      .</code></pre>
 </div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">The Trinity-assembled 18S/28S S. pombe rRNA region includes a TransDecoer predicted ORF with a blast match to an S. cerevisiae protein "Antisense to ribosomal RNA transcript protein 2 (ART2).</td>
+</tr></table>
+</div>
 <div class="paragraph"><p>Backticks (`) and carets (^) are used as delimiters for data packed within an individual field, such as separating E-values, percent identity, and taxonomic info for best matches. When there are multiple assignments in a given field, the assignments are separated by (\`) and the fields within an assignment are separated by (\^).  In a future release (post Feb-2013), the backticks and carets will be used more uniformly than above, such as carets as BLAST field separators, and including more than the top hit.</p></div>
-<h1 id="SampleData">Trinotate: Sample data and execution</h1>
-<div class="paragraph"><p>Sample data and a <em>runMe.sh</em> script are available at $TRINOTATE_HOME/sample_data/</p></div>
-<div class="paragraph"><p>Executing the <em>runMe.sh</em> script will pull down the Trinotate sqlite database, populate with the provided bioinformatics computes, and generate the final Trinotate annotation report.  In addition, pre-computed expression and DE analyses will be loaded for use with TrinotateWeb.</p></div>
-<h1 id="LitRefs">Literature references for software used for functional annotation</h1>
-<div class="ulist bibliography"><ul>
+<div class="paragraph" id="SampleData"><p>Sample data and a <em>runMe.sh</em> script are available at $TRINOTATE_HOME/sample_data/</p></div>
+<div class="paragraph"><p>Executing the <em>runMe.sh</em> script will pull down the Trinotate sqlite boilerplate database, populate with the provided bioinformatics computes, and generate the final Trinotate annotation report.  In addition, pre-computed expression and DE analyses will be loaded for use with TrinotateWeb.</p></div>
+<div class="ulist bibliography" id="LitRefs"><ul>
 <li>
 <p>
 <a id="Trinity"></a>[Trinity]Full-length transcriptome assembly from RNA-Seq data without a reference genome.
@@ -1526,17 +1498,17 @@ Nucleic Acids Res. 2007 Apr 22.
 </p>
 </li>
 </ul></div>
-<div class="sect1">
-<h2 id="Contact">Contact Us</h2>
-<div class="sectionbody">
-<div class="paragraph"><p>User support for Trinotate is provided at the Trinotate Google Group: <a href="https://groups.google.com/forum/?hl=en#!forum/trinotate-users">https://groups.google.com/forum/?hl=en#!forum/trinotate-users</a></p></div>
+<div class="paragraph" id="Contact"><p>User support for Trinotate is provided at the Trinotate Google Group: <a href="https://groups.google.com/forum/?hl=en#!forum/trinotate-users">https://groups.google.com/forum/?hl=en#!forum/trinotate-users</a></p></div>
+</td>
+</tr></table>
+</div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-10-23 20:16:58 EDT
+Last updated 2016-03-08 15:54:37 EST
 </div>
 </div>
 </body>
