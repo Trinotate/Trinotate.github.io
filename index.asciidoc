@@ -38,6 +38,7 @@ image::images/trinityWebLogo.png["TrinityWeb logo", width=350]
 - <<SeqAnalyses, Running Sequence Analyses>>
 - <<LoadingSQLite, Trinotate: Loading results into an SQLite database>>
 - <<OutputReport, Trinotate: Output an annotation report>> 
+- <<AutomatedExecution, Automated execution of Trinotate>>
 - <<SampleData, Trinotate: Sample data and execution>>
 - <<LitRefs, Literature references for software leveraged for functional annotation>>
 - <<Contact, Contact us>>
