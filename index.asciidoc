@@ -443,6 +443,42 @@ The Trinity-assembled 18S/28S S. pombe rRNA region includes a TransDecoer predic
 
 Backticks (\`) and carets (\^) are used as delimiters for data packed within an individual field, such as separating E-values, percent identity, and taxonomic info for best matches. When there are multiple assignments in a given field, the assignments are separated by (\`) and the fields within an assignment are separated by (\^).  In a future release (post Feb-2013), the backticks and carets will be used more uniformly than above, such as carets as BLAST field separators, and including more than the top hit.
 
+
+[[AutomatedExecution]]
+= Automated Execution of Trinotate: Running computes and loading results =
+
+Trinotate now comes with a script that automates the process of running all the above computes and loading the results. You'll find it as:
+
+    $TRINOTATE_HOME/auto/autoTrinotate.pl 
+
+    ##############################################################################
+    #
+    # Required:
+    #
+    #  --Trinotate_sqlite <string>                Trinotate.sqlite boilerplate database
+    #
+    #  --transcripts <string>                     transcripts.fasta
+    #
+    #  --gene_to_trans_map <string>               gene-to-transcript mapping file
+    #
+    #  --conf <string>                            config file
+    #
+    #  --CPU <int>                                number of threads to use.
+    #
+    #
+    ##############################################################################
+
+
+
+The configuration file given to the '--conf' parameter describes the pipeline execution. An example config file is provided as:
+    
+    $TRINOTATE_HOME/auto/conf.txt
+
+Simply update the header portion of the conf.txt file to indicate the path to the programs you have installed and the paths to the resources indicated, and then run the script to process the data.
+
+
+
+
 [[SampleData]]
 = Trinotate: Sample data and execution =
 

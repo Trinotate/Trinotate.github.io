@@ -1493,6 +1493,37 @@ myces
 </tr></table>
 </div>
 <div class="paragraph"><p>Backticks (`) and carets (^) are used as delimiters for data packed within an individual field, such as separating E-values, percent identity, and taxonomic info for best matches. When there are multiple assignments in a given field, the assignments are separated by (\`) and the fields within an assignment are separated by (\^).  In a future release (post Feb-2013), the backticks and carets will be used more uniformly than above, such as carets as BLAST field separators, and including more than the top hit.</p></div>
+<h1 id="AutomatedExecution">Automated Execution of Trinotate: Running computes and loading results</h1>
+<div class="paragraph"><p>Trinotate now comes with a script that automates the process of running all the above computes and loading the results. You&#8217;ll find it as:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>$TRINOTATE_HOME/auto/autoTrinotate.pl</code></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>##############################################################################
+#
+# Required:
+#
+#  --Trinotate_sqlite &lt;string&gt;                Trinotate.sqlite boilerplate database
+#
+#  --transcripts &lt;string&gt;                     transcripts.fasta
+#
+#  --gene_to_trans_map &lt;string&gt;               gene-to-transcript mapping file
+#
+#  --conf &lt;string&gt;                            config file
+#
+#  --CPU &lt;int&gt;                                number of threads to use.
+#
+#
+##############################################################################</code></pre>
+</div></div>
+<div class="paragraph"><p>The configuration file given to the <em>--conf</em> parameter describes the pipeline execution. An example config file is provided as:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>$TRINOTATE_HOME/auto/conf.txt</code></pre>
+</div></div>
+<div class="paragraph"><p>Simply update the header portion of the conf.txt file to indicate the path to the programs you have installed and the paths to the resources indicated, and then run the script to process the data.</p></div>
 <h1 id="SampleData">Trinotate: Sample data and execution</h1>
 <div class="paragraph"><p>Sample data and a <em>runMe.sh</em> script are available at $TRINOTATE_HOME/sample_data/</p></div>
 <div class="paragraph"><p>Executing the <em>runMe.sh</em> script will pull down the Trinotate sqlite boilerplate database, populate with the provided bioinformatics computes, and generate the final Trinotate annotation report.  In addition, pre-computed expression and DE analyses will be loaded for use with TrinotateWeb.</p></div>
@@ -1583,7 +1614,7 @@ Nucleic Acids Res. 2007 Apr 22.
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-08 16:02:30 EST
+Last updated 2016-03-08 16:42:16 EST
 </div>
 </div>
 </body>
