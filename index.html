@@ -913,8 +913,13 @@ signalP v4 (free academic download)
 </p>
 <div class="literalblock">
 <div class="content">
-<pre><code>You should edit the following line to read like so, increasing the max number of entries that can be processed:
-my $MAX_ALLOWED_ENTRIES=2000000;  # default is only 2000</code></pre>
+<pre><code>#You should edit the following line to read like so, increasing the max number of entries that can be processed:
+my $MAX_ALLOWED_ENTRIES=2000000;  # default is only 10000</code></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>#also update the path to where you have the signalP software installed eg.:
+$ENV{SIGNALP} = '/usr/local/src/signalp-4.1';</code></pre>
 </div></div>
 </li>
 <li>
@@ -1673,7 +1678,7 @@ Nucleic Acids Res. 2007 Apr 22.
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 12:33:09 EDT
+Last updated 2016-05-23 12:50:26 EDT
 </div>
 </div>
 </body>
