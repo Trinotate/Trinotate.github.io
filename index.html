@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.8" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
 <title>Trinotate: Transcriptome Functional Annotation and Analysis</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,7 +94,9 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-
+pre {
+  white-space: pre-wrap;
+}
 
 #author {
   color: #527bbd;
@@ -223,7 +225,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; }
+span.image img { border-style: none; vertical-align: text-bottom; }
 a.image:visited { color: white; }
 
 dl {
@@ -933,20 +935,72 @@ RNAMMER (free academic download)
 </p>
 <div class="literalblock">
 <div class="content">
-<pre><code>Installation notes:
+<pre><code>Installation notes:</code></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>    Installing RNAMMER requires a little bit of hacking, unfortunately, and if you follow the instructions below you will likely get it working.
+When you obtain the software bundle from the above website, be sure to untar it in a new directory. For example:</code></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>mkdir RNAMMER
+cd RNAMMER
+mv /path/to/rnammer-1.2.src.tar.Z .
+tar zxvf rnammer-1.2.src.tar.Z</code></pre>
+</div></div>
+<div class="olist loweralpha"><ol class="loweralpha">
+<li>
+<p>
 RNAMMER requires the older version of hmmsearch (v2).
-You can obtain the hmmsearch_v2 at ftp://selab.janelia.org/pub/software/hmmer/2.3.2/hmmer-2.3.2.tar.gz[ftp://selab.janelia.org/pub/software/hmmer/2.3.2/hmmer-2.3.2.tar.gz].
-After building the software, we suggest you rename this version of hmmsearch as 'hmmsearch2'.</code></pre>
+  You can obtain the hmmsearch_v2 at <a href="http://eddylab.org/software/hmmer/2.3/hmmer-2.3.tar.gz">http://eddylab.org/software/hmmer/2.3/hmmer-2.3.tar.gz</a>.
+  After building the software, rename this version of hmmsearch as <em>hmmsearch2</em>.
+</p>
+</li>
+<li>
+<p>
+Hack the <em>rnammer</em> script like so;  In the <em>rnammer</em> software configuration, edit the rnammer script to point
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>$HMMSEARCH_BINARY = "/path/to/hmmsearch2";
+    # be sure to give the complete path to where you installed hmmsearch2.</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>In the 'rnammer' software configuration, edit the rnammer script to point
-$HMMSEARCH_BINARY = "/path/to/hmmsearch2";</code></pre>
+<pre><code>    # update the INSTALL_PATH setting:
+$INSTALL_PATH = "/dir/where/you/installed/RNAMMER";</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+Hack the <em>core-rnammer</em> script like so:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>There are two places where you'll find '--cpu 1 --compat'.  Remove the '--cpu1' at each of these places, and retain the '--compat'.</code></pre>
+</div></div>
+</li>
+<li>
+<p>
+Be sure that rnammer functions correctly by executing it on their provided sample data.  RNAMMER is quite useful, but the current implementation is not robust to error, so check carefully.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><code>    # visit the example directory included in rnammer
+cd RNAMMER/example</code></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>Be sure that rnammer functions correctly by executing it on their provided sample data.  RNAMMER is quite useful, but the current implementation is not robust to error, so check carefully.</code></pre>
+<pre><code>    # now run the example command like so:
+../rnammer -S bac -m lsu,ssu,tsu -xml ecoli.xml -gff ecoli.gff -h ecoli.hmmreport &lt; ecoli.fsa</code></pre>
 </div></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>If it runs without error AND generates new 'ecoli.xml', 'ecoli.gff', and 'ecoli.hmmreport' files (check the datestamps on the files via 'ls -ltr'), then congratulate yourself for successfully installing rnammer.</code></pre>
+</div></div>
+</li>
+</ol></div>
 </li>
 </ul></div>
 </div>
@@ -1619,7 +1673,7 @@ Nucleic Acids Res. 2007 Apr 22.
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-03-08 16:44:05 EST
+Last updated 2016-05-23 12:33:09 EDT
 </div>
 </div>
 </body>
