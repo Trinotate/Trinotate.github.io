@@ -132,14 +132,13 @@ http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
 [[SequencesRequired]]
 == Sequence Databases Required ==
 
-Trinotate is *built around specific releases of SwissProt and Pfam*, and custom protein files are generated for use with Trinotate. *It is imperative* that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files by running the Trinotate build process like so:
-Run the
+Trinotate *relies heavily on SwissProt and Pfam*, and custom protein files are generated as described below to be specifically used with Trinotate. You can obtain the protein database files by running this Trinotate build process.  This step will download several data resources including the latest version of swissprot, pfam, and other companion resources, create and populate a Trinotate boilerplate sqlite database (Trinotate.sqlite), and yield 'uniprot_sprot.pep' file to be used with BLAST, and the 'Pfam-A.hmm.gz' file to be used for Pfam searches. Run the build process like so:
 
 
       $TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl  Trinotate
 
 
-and it will provide to you:
+and once it completes, it will provide to you:
 
     Trinotate.sqlite
     uniprot_sprot.pep
