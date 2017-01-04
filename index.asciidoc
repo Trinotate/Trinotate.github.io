@@ -132,21 +132,28 @@ http://www.cbs.dtu.dk/cgi-bin/sw_request?rnammer
 [[SequencesRequired]]
 == Sequence Databases Required ==
 
-Trinotate is *built around specific releases of SwissProt and Pfam*, and custom protein files are generated for use with Trinotate. *It is imperative* that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:
+Trinotate is *built around specific releases of SwissProt and Pfam*, and custom protein files are generated for use with Trinotate. *It is imperative* that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files by running the Trinotate build process like so:
+Run the
 
-SwissProt
-https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/uniprot_sprot.pep.gz[Download SwissProt here]
 
-    be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
-    gunzip uniprot_sprot.pep.gz
+      $TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl  Trinotate
+
+
+and it will provide to you:
+
+    Trinotate.sqlite
+    uniprot_sprot.pep
+    Pfam-A.hmm.gz
+
+Prepare the protein database for blast searches by:
+
     makeblastdb -in uniprot_sprot.pep -dbtype prot
 
-Pfam domains
-https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Pfam-A.hmm.gz[Download Pfam-A here]
+Uncompress and prepare the Pfam database for use with 'hmmscan' like so:
 
-   Uncompress and prepare it for use with 'hmmscan' like so:
-   gunzip Pfam-A.hmm.gz
-   hmmpress Pfam-A.hmm
+    gunzip Pfam-A.hmm.gz
+    hmmpress Pfam-A.hmm
+
 
 [[SeqAnalyses]]
 = Running Sequence Analyses =
@@ -312,24 +319,6 @@ The following commands will import the results from the bioinformatic computes p
 
 
 Follow the steps below to obtain a boilerplate Trinotate sqlite database and populate it with your data.
-
-
-== Retrieve the Trinotate Pre-generated Resource SQLite database ==
-
-A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:
-
-   wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v3.sqlite.gz" -O Trinotate.sqlite.gz
-
-
-Uncompress it like so:
-
-   gunzip Trinotate.sqlite.gz
-
-[NOTE]
-The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Trinotate v3).
-
-[NOTE]
-This boilerplate database comes with all annotation resources loaded into it, including swissprot record information, and will reflect the data that was available at the time of the build.   If for whatever reason you want to create your own boilerplate database based on the data available at current time, you can run the '$TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl' script in a clean workspace, and it will pull down all the currently available data sets and build the boilerplate sqlite database based on their contents.
 
 
 == Load transcripts and coding regions  ==

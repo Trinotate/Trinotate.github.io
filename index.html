@@ -1013,21 +1013,28 @@ cd RNAMMER/example</code></pre>
 <div class="sect1">
 <h2 id="SequencesRequired">2. Sequence Databases Required</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>Trinotate is <strong>built around specific releases of SwissProt and Pfam</strong>, and custom protein files are generated for use with Trinotate. <strong>It is imperative</strong> that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files as the links below:</p></div>
-<div class="paragraph"><p>SwissProt
-<a href="https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/uniprot_sprot.pep.gz">Download SwissProt here</a></p></div>
+<div class="paragraph"><p>Trinotate is <strong>built around specific releases of SwissProt and Pfam</strong>, and custom protein files are generated for use with Trinotate. <strong>It is imperative</strong> that these protein files are searched in order to maintain Trinotate compatibility; this is primarily because the UniprotKB identifiers are used as the protein accessions.  You can obtain the protein database files by running the Trinotate build process like so:
+Run the</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>be sure the search database is uncompressed and properly formatted by running the following (requires that blast+ is already installed as indicated above)
-gunzip uniprot_sprot.pep.gz
-makeblastdb -in uniprot_sprot.pep -dbtype prot</code></pre>
+<pre><code>$TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl  Trinotate</code></pre>
 </div></div>
-<div class="paragraph"><p>Pfam domains
-<a href="https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Pfam-A.hmm.gz">Download Pfam-A here</a></p></div>
+<div class="paragraph"><p>and it will provide to you:</p></div>
 <div class="literalblock">
 <div class="content">
-<pre><code>Uncompress and prepare it for use with 'hmmscan' like so:
-gunzip Pfam-A.hmm.gz
+<pre><code>Trinotate.sqlite
+uniprot_sprot.pep
+Pfam-A.hmm.gz</code></pre>
+</div></div>
+<div class="paragraph"><p>Prepare the protein database for blast searches by:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>makeblastdb -in uniprot_sprot.pep -dbtype prot</code></pre>
+</div></div>
+<div class="paragraph"><p>Uncompress and prepare the Pfam database for use with <em>hmmscan</em> like so:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><code>gunzip Pfam-A.hmm.gz
 hmmpress Pfam-A.hmm</code></pre>
 </div></div>
 </div>
@@ -1325,38 +1332,7 @@ report generation:
 </ul></div>
 <div class="paragraph"><p>Follow the steps below to obtain a boilerplate Trinotate sqlite database and populate it with your data.</p></div>
 <div class="sect1">
-<h2 id="_retrieve_the_trinotate_pre_generated_resource_sqlite_database">1. Retrieve the Trinotate Pre-generated Resource SQLite database</h2>
-<div class="sectionbody">
-<div class="paragraph"><p>A pregenerated sqlite database that contains Uniprot(swissprot and uniref90)-related annotation information is available from the Trinity ftp site. Pull it down like so:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>wget "https://data.broadinstitute.org/Trinity/Trinotate_v3_RESOURCES/Trinotate_v3.sqlite.gz" -O Trinotate.sqlite.gz</code></pre>
-</div></div>
-<div class="paragraph"><p>Uncompress it like so:</p></div>
-<div class="literalblock">
-<div class="content">
-<pre><code>gunzip Trinotate.sqlite.gz</code></pre>
-</div></div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">The boilerplate Trinotate.sqlite database downloaded above is specific to each software release.  The link above will retrieve the sqlite database that is compatible with this current software version (Trinotate v3).</td>
-</tr></table>
-</div>
-<div class="admonitionblock">
-<table><tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">This boilerplate database comes with all annotation resources loaded into it, including swissprot record information, and will reflect the data that was available at the time of the build.   If for whatever reason you want to create your own boilerplate database based on the data available at current time, you can run the <em>$TRINOTATE_HOME/admin/Build_Trinotate_Boilerplate_SQLite_db.pl</em> script in a clean workspace, and it will pull down all the currently available data sets and build the boilerplate sqlite database based on their contents.</td>
-</tr></table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_load_transcripts_and_coding_regions">2. Load transcripts and coding regions</h2>
+<h2 id="_load_transcripts_and_coding_regions">1. Load transcripts and coding regions</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>Begin populating the sqlite database by loading three data types:</p></div>
 <div class="ulist"><ul>
@@ -1396,7 +1372,7 @@ Gene/Transcript relationships (tab delimited format: "gene_id(tab)transcript_id"
 </div>
 </div>
 <div class="sect1">
-<h2 id="_loading_blast_homologies">3. Loading BLAST homologies</h2>
+<h2 id="_loading_blast_homologies">2. Loading BLAST homologies</h2>
 <div class="sectionbody">
 <div class="literalblock">
 <div class="content">
@@ -1422,7 +1398,7 @@ Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastx.outfmt6 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_load_pfam_domain_entries">4. Load Pfam domain entries</h2>
+<h2 id="_load_pfam_domain_entries">3. Load Pfam domain entries</h2>
 <div class="sectionbody">
 <div class="literalblock">
 <div class="content">
@@ -1431,7 +1407,7 @@ Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastx.outfmt6 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_load_transmembrane_domains">5. Load transmembrane domains</h2>
+<h2 id="_load_transmembrane_domains">4. Load transmembrane domains</h2>
 <div class="sectionbody">
 <div class="literalblock">
 <div class="content">
@@ -1440,7 +1416,7 @@ Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 custom_db.blastx.outfmt6 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_load_signal_peptide_predictions">6. Load signal peptide predictions</h2>
+<h2 id="_load_signal_peptide_predictions">5. Load signal peptide predictions</h2>
 <div class="sectionbody">
 <div class="literalblock">
 <div class="content">
@@ -1678,7 +1654,7 @@ Nucleic Acids Res. 2007 Apr 22.
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 12:50:26 EDT
+Last updated 2017-01-03 21:36:16 EST
 </div>
 </div>
 </body>
